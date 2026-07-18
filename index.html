@@ -103,6 +103,7 @@
 
 <div class="wrap fam hidden" id="famView">
   <h1>📚 기록 관리 (가족용)</h1>
+  <div class="notice hidden" id="famInfo" style="white-space: pre-wrap;"></div>
   <div class="notice">아버님이 말씀하신 이야기가 시기 순서대로 정리됩니다. 나이(몇 살)로 말씀하신 이야기를 정확한 연도로 계산하려면 아래에 아버님 출생 연도를 넣어 주세요.</div>
   <div class="toolbar">
     <input type="number" id="birthYear" placeholder="출생 연도 (예: 1948)" style="width: 200px;">
@@ -139,7 +140,11 @@
     '살면서 제일 자랑스러웠던 순간은 언제였나요?',
     '형제분들과 어린 시절에 어떻게 지내셨나요? 이름도 한 분씩 떠올려 보세요.',
     '명절날 고향 집 풍경은 어땠나요? 무엇을 하고 지냈나요?',
-    '젊었을 때 살던 동네는 어떤 곳이었나요? 이웃들 이름이 기억나시나요?'
+    '젊었을 때 살던 동네는 어떤 곳이었나요? 이웃들 이름이 기억나시나요?',
+    '아내 순자 님을 처음 만나셨을 때 이야기를 들려주세요. 첫인상이 어떠셨나요?',
+    '큰아들 기웅이가 태어나던 날 기억나세요? 그때 어떤 마음이셨나요?',
+    '작은아들 승웅이가 어렸을 때 기억에 남는 일이 있으세요?',
+    '손주 은성이, 호연이, 린이를 처음 안아보셨을 때 기억나세요? 어떤 기분이셨나요?'
   ];
 
   var state = 'idle';
@@ -345,6 +350,10 @@
   function renderFam(){
     if (!famData) return;
     if (famData.birth_year) $('birthYear').value = famData.birth_year;
+    if (famData.family_info) {
+      $('famInfo').textContent = '👨‍👩‍👦 우리 가족\n' + famData.family_info;
+      $('famInfo').classList.remove('hidden');
+    }
     var list = $('entryList');
     list.innerHTML = '';
     var es = famData.entries || [];
@@ -406,6 +415,7 @@
     var es = (famData && famData.entries) || [];
     var today = new Date();
     var out = '아버지 연대기\n(' + today.getFullYear() + '년 ' + (today.getMonth()+1) + '월 ' + today.getDate() + '일 기준, 총 ' + es.length + '편)\n';
+    if (famData && famData.family_info) { out += '\n■ 우리 가족\n' + famData.family_info + '\n'; }
     var lastLabel = null;
     es.forEach(function(e){
       var label = periodLabel(e);
